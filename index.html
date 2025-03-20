@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <h1 align="center">Simulador de interferencias de ondas</h1>
+    <h1 align="center"><a href="https://github.com/h3nry-d1az/interferencias" style="text-decoration: none; color: black;">Simulador de interferencias de ondas</a></h1>
     <br>
     <br>
     <div id="twocol">
@@ -27,12 +27,14 @@
             <br>
             <br>
             <br>
+            <br>
             Tiempo transcurrido: <em><span id="time-elapsed">0</span></em>s.
             <br>
             <br>
             <br>
-            <button onclick="start()">Comenzar</button>
-            <button onclick="terminate()">Terminar</button>
+            <button onclick="start()">⏵︎ Comenzar</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;<!--⏸︎-->
+            <button onclick="terminate()">⏹︎ Terminar</button>
         </div>
         <div align="center">
             <h2 style="text-align: left;">Ecuaciones de las ondas</h2>
@@ -65,7 +67,10 @@
             <hr>
             <div style="text-align: left;">
                 <h2>Configuración</h2>
-                <input type="checkbox" id="node-displacement">
+                <input type="checkbox" id="total-wave">
+                <label for="total-wave">Mostrar la onda resultante.</label>
+                <br>
+                <input type="checkbox" id="node-displacement" checked>
                 <label for="node-displacement">Mostrar el desplazamiento de los nodos.</label>
                 <br>
                 <input type="range" id="simulation-speed" min="0.25" max="4" value="1">
@@ -75,7 +80,7 @@
     </div>
     <br>
     <footer>Licenciado bajo Creative Commons Attribution-NoDerivatives 4.0 International.</footer>
-    <footer>Un proyecto de <em>Henry Díaz Bordón</em>, <em>Álvaro Estupiñán Santana</em> y <em>Miguel Florido Herrera</em>.
+    <footer>Un proyecto de <em><a href="https://github.com/h3nry-d1az" style="text-decoration: none; color: black;">Henry Díaz Bordón</a></em>, <em>Álvaro Estupiñán Santana</em> y <em>Miguel Florido Herrera</em>.
     </footer>
 </body>
 <script>
