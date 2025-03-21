@@ -35,6 +35,17 @@ let simulation_speed = document.getElementById("simulation-speed");
 let ymax_input = document.getElementById("ymax");
 let xmax_input = document.getElementById("xmax");
 
+// Appearence
+let y1_color = document.getElementById("y1-color");
+let y2_color = document.getElementById("y2-color");
+let final_wave_color = document.getElementById("final-wave-color");
+let node_color = document.getElementById("node-color");
+
+let y1_line_width = document.getElementById("y1-line-width");
+let y2_line_width = document.getElementById("y2-line-width");
+let final_wave_line_width = document.getElementById("final-wave-line-width");
+let node_radius = document.getElementById("node-radius");
+
 // Variables
 let ymax = Math.SQRT2,
     xmax = 2*Math.PI;
@@ -52,6 +63,7 @@ let active = false;
 let t = 0;
 
 let _timestamp = Date.now();
+let _nodes = []
 
 function start()
 {
@@ -93,26 +105,34 @@ function cartesian_to_canvas(x, y)
     ]
 }
 
-function plot(wave, color)
+function plot(wave, color, line_width, nodes=false)
 {
     for (let x = 0; x < xmax; x += xmax/1000)
     {
-        let plot_y1 = cartesian_to_canvas(x, wave(x, t));
+        let plot_coords = cartesian_to_canvas(x, wave(x, t));
         screen.fillStyle = color;
-        screen.fillRect(plot_y1[0], plot_y1[1], 5, 5);
+        screen.fillRect(plot_coords[0], plot_coords[1], line_width, line_width);
+
+        if ((screen_size[1]/2-ymax/3 <= plot_coords[1])
+         && (plot_coords[1] <= screen_size[1]/2+ymax/3)
+         && nodes)
+        {
+            _nodes.push([plot_coords[0], screen_size[1]/2])
+        }
     }
 }
 
 function draw()
 {
     screen.clearRect(0, 0, screen_size[0], screen_size[1]);
+    _nodes = []
 
-    plot(y1, "blue");
-    plot(y2, "red");
+    plot(y1, y1_color.value, y1_line_width.value);
+    plot(y2, y2_color.value, y2_line_width.value);
 
     if (total_wave.checked)
     {
-        plot((x, t) => y1(x,t) + y2(x,t), "black")
+        plot((x, t) => y1(x,t) + y2(x,t), final_wave_color.value, final_wave_line_width.value, node_displacement.checked)
     }
 
     if (axes.checked)
@@ -128,6 +148,19 @@ function draw()
         screen.moveTo(0, screen_size[1]/2);
         screen.lineTo(screen_size[0], screen_size[1]/2);
         screen.stroke();
+    }
+
+    for (node of _nodes)
+    {
+        screen.fillStyle = node_color.value;
+        screen.beginPath()
+        screen.arc(node[0], node[1], node_radius.value, 0, 2*Math.PI)
+        screen.fill()
+
+        screen.fillStyle = "black";
+        screen.beginPath()
+        screen.arc(node[0], node[1], node_radius.value, 0, 2*Math.PI)
+        screen.stroke()
     }
 }
 
