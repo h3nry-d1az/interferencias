@@ -1,9 +1,5 @@
 let screen = document.getElementById("display").getContext("2d");
-let screen_size = (450, 253);
-
-screen.moveTo(0, 0);
-screen.lineTo(500, 281);
-screen.stroke();
+let screen_size = [450, 253];
 
 // Control buttons
 let start_button = document.getElementById("start-button");
@@ -32,6 +28,7 @@ let vp2_span = document.getElementById("vp2");
 
 // Settings
 let total_wave = document.getElementById("total-wave");
+let axes = document.getElementById("axes");
 let node_displacement = document.getElementById("node-displacement");
 let simulation_speed = document.getElementById("simulation-speed");
 
@@ -39,8 +36,8 @@ let ymax_input = document.getElementById("ymax");
 let xmax_input = document.getElementById("xmax");
 
 // Variables
-let ymax = 0,
-    xmax = 0;
+let ymax = Math.SQRT2,
+    xmax = 2*Math.PI;
 
 let A1 = 1,
     A2 = 1,
@@ -69,6 +66,8 @@ function terminate()
     time_elapsed.textContent = "0";
     active = false;
     start_button.textContent = "⏵︎ Comenzar";
+
+    draw()
 }
 
 function recalculate_data()
@@ -85,6 +84,52 @@ function recalculate_data()
 
 function y1(x, t) { return A1*Math.sin(omega1*t - k1*x + phi1); }
 function y2(x, t) { return A2*Math.sin(omega2*t - k2*x + phi2); }
+
+function cartesian_to_canvas(x, y)
+{
+    return [
+        x * (screen_size[0]/xmax),
+        - y * (screen_size[1]/(2*ymax)) + screen_size[1]/2
+    ]
+}
+
+function plot(wave, color)
+{
+    for (let x = 0; x < xmax; x += xmax/1000)
+    {
+        let plot_y1 = cartesian_to_canvas(x, wave(x, t));
+        screen.fillStyle = color;
+        screen.fillRect(plot_y1[0], plot_y1[1], 5, 5);
+    }
+}
+
+function draw()
+{
+    screen.clearRect(0, 0, screen_size[0], screen_size[1]);
+
+    plot(y1, "blue");
+    plot(y2, "red");
+
+    if (total_wave.checked)
+    {
+        plot((x, t) => y1(x,t) + y2(x,t), "black")
+    }
+
+    if (axes.checked)
+    {
+        screen.lineWidth=7;
+        screen.beginPath();
+        screen.moveTo(0, 0);
+        screen.lineTo(0, screen_size[1]);
+        screen.stroke();
+
+        screen.lineWidth=3.5;
+        screen.beginPath();
+        screen.moveTo(0, screen_size[1]/2);
+        screen.lineTo(screen_size[0], screen_size[1]/2);
+        screen.stroke();
+    }
+}
 
 setInterval(function ()
 {
@@ -113,6 +158,14 @@ setInterval(function ()
     if ((new_phi2 != phi2) && (new_phi2 || new_phi2 == 0)) { phi2 = new_phi2; changes = true; }
 
     if (changes) { recalculate_data() };
+
+    let new_ymax = parseFloat(ymax_input.value ? ymax_input.value : Math.SQRT2);
+    let new_xmax = parseFloat(xmax_input.value ? xmax_input.value : 2*Math.PI);
+
+    if ((new_ymax != ymax) && (new_ymax || new_ymax == 0)) { ymax = new_ymax; }
+    if ((new_xmax != xmax) && (new_xmax || new_xmax == 0)) { xmax = new_xmax; }
+
+    draw();
 
     if (!active) return;
 

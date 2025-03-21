@@ -74,11 +74,15 @@
             <br>
             <div style="text-align: left;">
                 <h2>Configuración</h2>
-                <input type="checkbox" id="total-wave">
+                <input type="checkbox" id="total-wave" checked>
                 <label for="total-wave">Mostrar la onda resultante.</label>
                 <br>
                 <br>
-                <input type="checkbox" id="node-displacement" checked>
+                <input type="checkbox" id="axes" checked>
+                <label for="axes">Mostrar ejes de coordenadas.</label>
+                <br>
+                <br>
+                <input type="checkbox" id="node-displacement">
                 <label for="node-displacement">Mostrar el desplazamiento de los nodos.</label>
                 <br>
                 <br>
@@ -86,10 +90,10 @@
                 <label for="simulation-speed">Velocidad de la simulación.</label>
                 <br>
                 <br>
-                <input style="display: inline; width: 25px;" type="text" placeholder="1" id="ymax"> Valor máximo/mínimo en el eje <em>y</em>.
+                <input style="display: inline; width: 25px;" type="text" placeholder="√2" id="ymax"> Valor máximo/mínimo en el eje <em>y</em>.
                 <br>
                 <br>
-                <input style="display: inline; width: 25px;" type="text" placeholder="1" id="xmax"> Máximo valor en el eje <em>x</em>.
+                <input style="display: inline; width: 25px;" type="text" placeholder="2π" id="xmax"> Máximo valor en el eje <em>x</em>.
             </div>
         </div>
     </div>
